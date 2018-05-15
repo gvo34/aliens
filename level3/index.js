@@ -7,12 +7,16 @@
 // Set filteredAddresses to addressData initially
 var filteredUFOdata = dataSet;
 
+var searchResultCount = 50; //allow to show 50 search results per page
+var currentPage = 1;
+
+
 // Get references to the tbody element, input field and button
 var $tbody = document.querySelector("tbody");
 var $userInput = document.querySelector("#userinput");
 var $searchBtn = document.querySelector("#search");
 var $searchTypeDropDwn = document.querySelector("#dropdownMenu1");
-var selection = document.querySelector("#selection");
+var $selection = document.querySelector("#selection");
 var selectType = "dd/mm/yyyy" //initial default is datetime
 
 // get list of valid inputs
@@ -21,12 +25,173 @@ var validCountries = dataSet.map(x=>x.country)
 var validStates = dataSet.map(x=>x.state)
 var validShapes = dataSet.map(x=>x.shape)
 
-//get page number
-var pagenumber = d3.select("li");
+//get pagination buttons
+var lastPage = Math.ceil(filteredUFOdata.length / searchResultCount);
+var $pagenext = d3.select("#next");
+var $page1 = d3.select("#page1");
+var $page2 = d3.select("#page2");
+var $page3 = d3.select("#page3");
+var $page4 = d3.select("#page4");
+var $page5 = d3.select("#page5");
+var $pageprev = d3.select("#prev");
+var $pagecurrent = d3.select("#pagec");
 
 
 // Add an event listener to the searchButton, searchType call handleSearchButtonClick when clicked
 $searchBtn.addEventListener("click", handleSearchButtonClick);
+
+
+
+//Add events to pagination buttons
+$pagenext.on("click",function(){
+  // Reset table content and highlighted pagination buttons to new page
+  currentPage = currentPage +1;
+  $active = d3.select(".active");
+  $active.attr("class","inactive");
+  $pagecurrent.text("");
+
+  switch(currentPage) {
+    case(1):
+      $page1.attr("class","active");  
+    break;
+    case(2):
+      $page2.attr("class","active");
+    break;
+    case(3):
+      $page3.attr("class","active");
+    break;
+    case(4):
+      $page4.attr("class","active");
+    break;
+    case(5):
+      $page5.attr("class","active");
+    break;
+    default:
+      console.log("setting page larger than 5");
+      $pagecurrent.attr("class","active");
+      $pagecurrent.text(currentPage);      
+  }
+
+  console.log("current page", currentPage);
+  console.log("last page ",lastPage);
+  if (currentPage == lastPage){
+    console.log("disable next page");
+    $pagenext.attr("class","disabled");  
+  } else {
+    console.log("re-enable next page");
+    $pagenext.attr("class","enabled");  
+  }
+
+  //re-enable previous page
+  $pageprev.attr("class","enabled");
+
+  renderTable();
+  console.log("current page ", currentPage, " last page ", lastPage);
+
+
+});
+
+$page1.on("click",function(){
+  currentPage = 1;
+  $active = d3.select(".active");
+  $active.attr("class","inactive");
+  $page1.attr("class","active");
+  $pageprev.attr("class","disabled");
+  $pagecurrent.text("");
+
+  renderTable();
+  console.log("current page ", currentPage, " last page ", lastPage);
+});
+
+$page2.on("click",function(){
+  currentPage = 2;
+  $active = d3.select(".active");
+  $active.attr("class","inactive");
+  $page2.attr("class","active");
+  $pageprev.attr("class","enabled");
+  $pagecurrent.text("");
+
+  renderTable();
+  console.log("current page ", currentPage, " last page ", lastPage);
+
+});
+
+$page3.on("click",function(){
+  currentPage = 3;
+  $active = d3.select(".active");
+  $active.attr("class","inactive");
+  $page3.attr("class","active");
+  $pageprev.attr("class","enabled");
+  $pagecurrent.text("");
+
+  renderTable();
+  console.log("current page ", currentPage, " last page ", lastPage);
+
+});
+
+$page4.on("click",function(){
+  currentPage = 4;
+  $active = d3.select(".active");
+  $active.attr("class","inactive");
+  $page4.attr("class","active");
+  $pageprev.attr("class","enabled");
+  $pagecurrent.text("");
+
+  renderTable();
+  console.log("current page ", currentPage, " last page ", lastPage);
+
+});
+
+$page5.on("click",function(){
+  currentPage = 5;
+  $active = d3.select(".active");
+  $active.attr("class","inactive");
+  $page5.attr("class","active");
+  $pageprev.attr("class","enabled");
+  $pagecurrent.text("");
+
+  renderTable();
+  console.log("current page ", currentPage, " last page ", lastPage);
+
+});
+
+$pageprev.on("click",function(){
+
+  if (currentPage==1){
+    return;
+  }
+  currentPage = currentPage -1;
+  $active = d3.select(".active");
+  $active.attr("class","inactive");
+  $pagecurrent.text("");
+
+  switch(currentPage) {
+    case(1):
+      $page1.attr("class","active");  
+      $pageprev.attr("class","disabled")
+    break;
+    case(2):
+      $page2.attr("class","active");
+    break;
+    case(3):
+      $page3.attr("class","active");
+    break;
+    case(4):
+      $page4.attr("class","active");
+    break;
+    case(5):
+      $page5.attr("class","active");
+    break;
+    default:
+      $pagecurrent.attr("class","active");
+      $pagecurrent.text(currentPage);
+  }
+
+
+  renderTable();
+  console.log("current page ", currentPage, " last page ", lastPage);
+
+});
 
 
 d3.selectAll(".dropdown-item").on("click", function handleSearchTypeSelect() {
@@ -41,13 +206,15 @@ d3.selectAll(".dropdown-item").on("click", function handleSearchTypeSelect() {
     console.log("set the selection");
     selectType = mylinkAnchor.attr("id");
     if (selectType == "dd/mm/yyyy"){
-      selection.text = "Date/Time";
-    } else if (selectType == "Enter City name"){
-      selection.text ="City";
-    } else if (selectType == "Enter State name") {
-      selection.text = "State";
+      $selection.text = "Date/Time";
+    } else if (selectType == "Enter City"){
+      $selection.text ="City";
+    } else if (selectType == "Enter State") {
+      $selection.text = "State";
     } else if (selectType == "Enter Shape"){
-      selection.text = "Shape";
+      $selection.text = "Shape";
+    } else if (selectType == "Enter Country"){
+      $selection.text = "Country";
     }
 
     console.log("mylinkAnchorAttribute: " + selectType);
@@ -59,22 +226,40 @@ d3.selectAll(".dropdown-item").on("click", function handleSearchTypeSelect() {
     
 });
 
-// renderTable renders the filteredAddresses to the tbody
+
+// renderTable renders the filteredUFOData to the tbody
 function renderTable() {
   $tbody.innerHTML = "";
-  for (var i = 0; i < filteredUFOdata.length; i++) {
-    // Get get the current address object and its fields
-    var ufodata = filteredUFOdata[i];
-    var fields = Object.keys(ufodata);
-    // Create a new row in the tbody, set the index to be i + startingIndex
-    var $row = $tbody.insertRow(i);
-    for (var j = 0; j < fields.length; j++) {
-      // For every field in the address object, create a new cell at set its inner text to be the current value at the current address's field
-      var field = fields[j];
-      var $cell = $row.insertCell(j);
-      $cell.innerText = ufodata[field];
-    }
+
+  var start_i = (currentPage-1) * searchResultCount;
+  if (currentPage * searchResultCount < filteredUFOdata.length)
+  {
+    var stop_i = currentPage * searchResultCount;
   }
+  else
+  {
+    var stop_i = filteredUFOdata.length;
+  }
+
+  console.log("start at ", start_i);
+  console.log("stop at ", stop_i); 
+  console.log("last page for current search ",lastPage);
+
+  for (var i = start_i; i < stop_i; i++) {
+      console.log('i:', i);
+      var ufodata = filteredUFOdata[i];
+      var fields = Object.keys(ufodata);
+      // re-establish index to start from 0 for insertRow
+      var insert_i = i-((currentPage-1)*searchResultCount);
+      // Create a new row in the tbody, set the index to be i + startingIndex
+      var $row = $tbody.insertRow(insert_i);
+      for (var j = 0; j < fields.length; j++) {
+        // For every field in the address object, create a new cell at set its inner text to be the current value at the current address's field
+        var field = fields[j];
+        var $cell = $row.insertCell(j);
+        $cell.innerText = ufodata[field];
+      }
+    }
 }
 
 // Utility function to validate user input
@@ -113,11 +298,11 @@ function validate(inputText)
       return false;}}
   else { // select type is a name (country, state, city or shape)
     var inputValue = inputText.value.trim().toLowerCase();
-    if (selectType == "Enter State name") {
+    if (selectType == "Enter State") {
       return(validStates.find(function(element){return element===inputValue;}))  } 
-    if (selectType == "Enter Country name") {
+    if (selectType == "Enter Country") {
       return(validCountries.find(function(element){return element===inputValue;})) }
-    else if (selectType == "Enter City name"){
+    else if (selectType == "Enter City"){
       return(validCities.find(function(element){return element===inputValue;})) } 
     else if (selectType == "Enter Shape"){
       return(validShapes.find(function(element){return element===inputValue;})) } 
@@ -138,40 +323,88 @@ function handleSearchButtonClick() {
       console.log("user input is valid")
       // Set filteredUFOdata to an array of all matching selected criteria
       filteredUFOdata = dataSet.filter(function(ufodata) {
-      console.log("apply filter");
-      if (selectType == "dd/mm/yyyy"){
-        console.log("on date");
-        var filterName = $userInput.value;
-        var nameValue = ufodata.datetime;
-        console.log(filterName);
-        console.log(nameValue);
-      }
-      else {
-        var filterName = $userInput.value.trim().toLowerCase();
-      
-        if (selectType == "Enter City name"){
-          console.log("on city");  
-          var nameValue = ufodata.city.toLowerCase();
+        if (selectType == "dd/mm/yyyy"){
+          var filterName = $userInput.value;
+          var nameValue = ufodata.datetime;
+          console.log(filterName);
+          console.log(nameValue);
         }
-        else if (selectType == "Enter State name"){
-          console.log("on state");  
-          var nameValue = ufodata.state.toLowerCase();
+        else {
+          var filterName = $userInput.value.trim().toLowerCase();
+        
+          if (selectType == "Enter City"){
+            var nameValue = ufodata.city.toLowerCase();
+          }
+          else if (selectType == "Enter State"){
+            var nameValue = ufodata.state.toLowerCase();
+          }
+          else if (selectType == "Enter Country"){
+            var nameValue = ufodata.country.toLowerCase();
+          }
+          else if (selectType == "Enter Shape") {
+            var nameValue = ufodata.shape.toLowerCase();
+          }
         }
-        else if (selectType == "Enter Country name"){
-          console.log("on country");  
-          var nameValue = ufodata.country.toLowerCase();
-        }
-        else if (selectType == "Enter Shape") {
-          console.log("on shape");  
-          var nameValue = ufodata.shape.toLowerCase();
-        }
-      }
       // If true, add the address to the filteredAddresses, otherwise don't add it to filteredAddresses
       return nameValue === filterName;
       });
+  
+      //update last page
+      lastPage = Math.ceil(filteredUFOdata.length / searchResultCount);  
+      // reset first page is default displayed
+      currentPage = 1; 
       renderTable();
+  
       $userInput.value='';
       $userInput.style.color="black";
+
+      // pagination feedback
+      console.log("feedback pagination");
+      console.log("current ",currentPage);
+      console.log("last ",lastPage);
+        
+      $active = d3.select(".active");
+      $active.attr("class","inactive");
+      $page1.attr("class","active");  
+      $pageprev.attr("class","disabled"); // always display page 1 deacivate previous button
+         
+      switch(lastPage) {
+          case(1):
+            $pagenext.attr("class","disabled");
+            $page2.attr("class","hidden");
+            $page3.attr("class","hidden");
+            $page4.attr("class","hidden");
+            $page5.attr("class","hidden");
+          break;
+          case(2):
+            
+            $page2.attr("class","enabled");
+            $page3.attr("class","hidden");
+            $page4.attr("class","hidden");
+            $page5.attr("class","hidden");
+          break;
+          case(3):
+            
+            $page2.attr("class","enabled");
+            $page3.attr("class","enabled");
+            $page4.attr("class","hidden");
+            $page5.attr("class","hidden");
+          break;
+          case(4):
+            
+            $page2.attr("class","enabled");
+            $page3.attr("class","enabled");
+            $page4.attr("class","enabled");
+            $page5.attr("class","hidden");
+          break;
+          case(5):
+          default:
+            
+            $page2.attr("class","enabled");
+            $page3.attr("class","enabled");
+            $page4.attr("class","enabled");
+            $page5.attr("class","enabled");
+      } 
     }
     else {
       $userInput.value = $userInput.value + " NOT VALID"

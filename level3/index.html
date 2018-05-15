@@ -35,9 +35,9 @@
                                 <span class="caret"></span></a> 
                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                                <li class="dropdown-item" id="dd/mm/yyyy"><a  href="#">date/time</a></li>
-                               <li class="dropdown-item" id="Enter City name"><a  href="#">city</a></li>
-                               <li class="dropdown-item" id="Enter State name"><a  href="#">state</a></li>
-                               <li class="dropdown-item" id="Enter Country name"><a href="#">country</a></li>
+                               <li class="dropdown-item" id="Enter City"><a  href="#">city</a></li>
+                               <li class="dropdown-item" id="Enter State"><a  href="#">state</a></li>
+                               <li class="dropdown-item" id="Enter Country"><a href="#">country</a></li>
                                <li class="dropdown-item" id="Enter Shape"><a href="#">shape</a></li>
                                </ul>
                            </li>
@@ -63,20 +63,40 @@
 
 
     <!--pagination-->
-    <nav aria-label="Page navigation">
+    <nav aria-label="Search results pages">
       <ul class="pagination">
+        <!--
         <li>
-          <a href="#" aria-label="Previous">
+          <a href="#" aria-label="Previous" id="prev" aria-hidden="true">
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
-        <li id="page1"><a href="#">1</a></li>
-        <li id="page2"><a href="#">2</a></li>
-        <li id="page3"><a href="#">3</a></li>
-        <li id="page4"><a href="#">4</a></li>
-        <li id="page5"><a href="#">5</a></li>
+        -->
+        <li class="disabled" aria-label="Previous" id="prev" aria-hidden="true">
+          <span>
+            <span aria-hidden="true">&laquo;</span>
+          </span>
+        </li>
+        <li class="active" id="page1">
+          <span>1 </span>
+        </li>
+        <li class="inactive" id="page2">
+          <span>2 </span>
+        </li>
+        <li class="inactive" id="page3">
+          <span>3 </span>
+        </li>
+        <li class="inactive" id="page4">
+          <span>4 </span>
+        </li>
+        <li class="inactive" id="page5">
+          <span>5 </span>
+        </li>
+        <li class="hidden" id="pagec">
+          <span>current</span>
+        </li>
         <li>
-          <a href="#" aria-label="Next">
+          <a href="#" aria-label="Next" id="next">
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>
