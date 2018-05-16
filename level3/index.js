@@ -348,7 +348,8 @@ function handleSearchButtonClick() {
         }
         else {
           var filterName = $userInput.value.trim().toLowerCase();
-        
+         
+
           if (selectType == "Enter City"){
             var nameValue = ufodata.city.toLowerCase();
           }
@@ -366,8 +367,16 @@ function handleSearchButtonClick() {
       return nameValue === filterName;
       });
   
+      // Ensure filtered search is not empty, otherwise do nothing.
+      if (filteredUFOdata.length == 0) {
+        alert("No results match the criteria provided");
+        $userInput.focus(); 
+        return;
+      }
+
       //update last page
       lastPage = Math.ceil(filteredUFOdata.length / searchResultCount);  
+
       // reset first page is default displayed
       currentPage = 1; 
       renderTable();
@@ -424,7 +433,6 @@ function handleSearchButtonClick() {
       } 
     }
     else {
-      $userInput.value = $userInput.value + " NOT VALID"
       $userInput.style.color="red";
       console.log("user input not valid");
     }
