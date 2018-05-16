@@ -67,6 +67,15 @@
       <div class="col-md-10">
         <nav aria-label="Search results pages">
           <ul class="pagination">
+              <li>
+                  <span>
+                    <select id="selectFilterCount" onchange="setSearchResultCount(this.value)">
+                        <option value="10">10 per page</option>
+                        <option value="20">20 per page</option>
+                        <option value="50">50 per page</option>
+                    </select>
+                  </span>
+                </li>
             <li class="disabled" aria-label="Previous" id="prev" aria-hidden="true">
               <span>
                 <span aria-hidden="true">&laquo;</span>

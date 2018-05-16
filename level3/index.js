@@ -7,7 +7,7 @@
 // Set filteredAddresses to addressData initially
 var filteredUFOdata = dataSet;
 
-var searchResultCount = 50; //allow to show 50 search results per page
+var searchResultCount = 10; // initially show 20 search results per page
 var currentPage = 1;
 
 
@@ -38,14 +38,16 @@ var $pagecurrent = d3.select("#pagec");
 var $pageoverflow = d3.select("#pageoverflow");
 
 
+// reset filtered count results and re-display results
+function setSearchResultCount(count){
+  searchResultCount = count;
+  renderTable();
+}
+
 // Add an event listener to the searchButton, searchType call handleSearchButtonClick when clicked
 $searchBtn.addEventListener("click", handleSearchButtonClick);
 
-
-
-//Add events to pagination buttons
-
-// Pagination NEXT page
+// Pagination Next page selection
 $pagenext.on("click",function(){
 
   // if already on the last page return, and disable button
@@ -53,7 +55,6 @@ $pagenext.on("click",function(){
     $pagenext.attr("class","disabled");
     return;
   }
-
 
   // Reset table content and highlighted pagination buttons to the new page
   currentPage = currentPage +1;
@@ -102,6 +103,7 @@ $pagenext.on("click",function(){
 
 });
 
+// Pagination page 1 selection
 $page1.on("click",function(){
   currentPage = 1;
   $active = d3.select(".active");
@@ -115,6 +117,7 @@ $page1.on("click",function(){
   console.log("current page ", currentPage, " last page ", lastPage);
 });
 
+// Pagination page 2 selection
 $page2.on("click",function(){
   currentPage = 2;
   $active = d3.select(".active");
@@ -129,6 +132,7 @@ $page2.on("click",function(){
 
 });
 
+// Pagination page 3 selection
 $page3.on("click",function(){
   currentPage = 3;
   $active = d3.select(".active");
@@ -143,6 +147,7 @@ $page3.on("click",function(){
 
 });
 
+// Pagination page 4 selection
 $page4.on("click",function(){
   currentPage = 4;
   $active = d3.select(".active");
@@ -157,6 +162,7 @@ $page4.on("click",function(){
 
 });
 
+// Pagination page 5 selection
 $page5.on("click",function(){
   currentPage = 5;
   $active = d3.select(".active");
@@ -171,6 +177,7 @@ $page5.on("click",function(){
 
 });
 
+// Pagination Previous page selection
 $pageprev.on("click",function(){
 
   if (currentPage==1){
@@ -211,16 +218,13 @@ $pageprev.on("click",function(){
 });
 
 
+// Handle Search criteria selection via drop down
 d3.selectAll(".dropdown-item").on("click", function handleSearchTypeSelect() {
-
-    //console.log(this)
     var mylinkAnchor = d3.select(this);
-
-    // ReSet filteredAddresses to addressData
+    // reset the filtered data to original set (to re-apply filtering)
     var filteredUFOdata = dataSet;
-    // // Capture the child element's href attribute
-
     console.log("set the selection");
+    //set the selection type
     selectType = mylinkAnchor.attr("id");
     if (selectType == "dd/mm/yyyy"){
       $selection.text = "Date/Time";
@@ -248,6 +252,7 @@ d3.selectAll(".dropdown-item").on("click", function handleSearchTypeSelect() {
 function renderTable() {
   $tbody.innerHTML = "";
 
+  // set values to match pagination selection
   var start_i = (currentPage-1) * searchResultCount;
   if (currentPage * searchResultCount < filteredUFOdata.length)
   {
@@ -257,11 +262,11 @@ function renderTable() {
   {
     var stop_i = filteredUFOdata.length;
   }
-
   console.log("start at ", start_i);
   console.log("stop at ", stop_i); 
   console.log("last page for current search ",lastPage);
 
+  // filter the data to match the search criteria
   for (var i = start_i; i < stop_i; i++) {
       console.log('i:', i);
       var ufodata = filteredUFOdata[i];
@@ -297,7 +302,7 @@ function validate(inputText)
       var DaysInMonth = [31,28,31,30,31,30,31,31,30,31,30,31];
       if (mm==1 || mm>2){
         if (dd>DaysInMonth[mm-1]){
-         alert('Invalid date format!');
+         alert('Invalid date: day exceed days of the month!');
          return false;}}
       if (mm==2){
         // Check for leap year
@@ -305,10 +310,10 @@ function validate(inputText)
         if ( (!(yyyy % 4) && yyyy % 100) || !(yyyy % 400)) {
           leapyear = true;}
         if ((leapyear==false) && (dd>=29)){
-          alert('Invalid date format!');
+          alert('Invalid: days exceed month!');
           return false;}
         if ((leapyear==true) && (dd>29)){
-          alert('Invalid date format!');
+          alert('Invalid date for leap year!');
           return false;}}}
     else{
       alert("Invalid date format!");
@@ -329,9 +334,7 @@ function validate(inputText)
 }
 
 
-
-
-
+// Define search button clieck event to trigger filtered search and display
 function handleSearchButtonClick() {
     isvalid = validate($userInput);
     console.log(isvalid);
@@ -364,7 +367,7 @@ function handleSearchButtonClick() {
           }
         }
       // If true, add the address to the filteredAddresses, otherwise don't add it to filteredAddresses
-      return nameValue === filterName;
+      return nameValue == filterName;
       });
   
       // Ensure filtered search is not empty, otherwise do nothing.
