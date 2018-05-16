@@ -40,6 +40,41 @@ var $pageoverflow = d3.select("#pageoverflow");
 
 // reset filtered count results and re-display results
 function setSearchResultCount(count){
+  var previouspagecount = searchResultCount;
+  var oldpages = Math.ceil(filteredUFOdata.length/searchResultCount) 
+  var newpages = Math.ceil(filteredUFOdata.length/count) 
+  if (count>searchResultCount){
+    // there are more results per page, check if need to hide page buttons
+    if (newpages<5) {
+      $page5.attr("class","hidden");
+    }
+    if (newpages<4){
+      $page4.attr("class","hidden");
+    }
+    if (newpages<3){
+      $page3.attr("class","hidden");
+    }
+    if (newpages<2){
+      $page2.attr("class","hidden");
+    }
+  } 
+  else {
+    // need to unhide page buttons
+    if (oldpages<5 && newpages >= 5) {
+      $page5.attr("class","enable")
+    }
+    if (oldpages<4 && newpages >= 4){
+      $page4.attr("class","enabled")
+    }
+    if (oldpages<3 && newpages >= 3){
+      $page3.attr("class","enabled")
+    }
+    if (oldpages<2 && newpages >= 2){
+      $page2.attr("class","enabled")
+    }
+    
+  }
+  currentPage = 1;
   searchResultCount = count;
   renderTable();
 }
