@@ -44,7 +44,7 @@ function setSearchResultCount(count){
   var oldpages = Math.ceil(filteredUFOdata.length/searchResultCount) 
   var newpages = Math.ceil(filteredUFOdata.length/count) 
   if (count>searchResultCount){
-    $pageoverflow.attr("class","hidden");
+    $pagecurrent.attr("class","hidden");
     // there are more results per page, check if need to hide page buttons
     if (newpages<5) {
       $page5.attr("class","hidden");
