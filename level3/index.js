@@ -35,6 +35,7 @@ var $page4 = d3.select("#page4");
 var $page5 = d3.select("#page5");
 var $pageprev = d3.select("#prev");
 var $pagecurrent = d3.select("#pagec");
+var $pageoverflow = d3.select("#pageoverflow");
 
 
 // Add an event listener to the searchButton, searchType call handleSearchButtonClick when clicked
@@ -43,12 +44,22 @@ $searchBtn.addEventListener("click", handleSearchButtonClick);
 
 
 //Add events to pagination buttons
+
+// Pagination NEXT page
 $pagenext.on("click",function(){
-  // Reset table content and highlighted pagination buttons to new page
+
+  // if already on the last page return, and disable button
+  if (currentPage == lastPage){
+    $pagenext.attr("class","disabled");
+    return;
+  }
+
+
+  // Reset table content and highlighted pagination buttons to the new page
   currentPage = currentPage +1;
   $active = d3.select(".active");
   $active.attr("class","inactive");
-  $pagecurrent.text("");
+  $pagecurrent.attr("class","hidden");
 
   switch(currentPage) {
     case(1):
@@ -69,7 +80,7 @@ $pagenext.on("click",function(){
     default:
       console.log("setting page larger than 5");
       $pagecurrent.attr("class","active");
-      $pagecurrent.text(currentPage);      
+      $pageoverflow.text(currentPage);      
   }
 
   console.log("current page", currentPage);
@@ -97,7 +108,8 @@ $page1.on("click",function(){
   $active.attr("class","inactive");
   $page1.attr("class","active");
   $pageprev.attr("class","disabled");
-  $pagecurrent.text("");
+  $pagecurrent.attr("class","hidden");
+  $pageoverflow.text("");
 
   renderTable();
   console.log("current page ", currentPage, " last page ", lastPage);
@@ -109,7 +121,8 @@ $page2.on("click",function(){
   $active.attr("class","inactive");
   $page2.attr("class","active");
   $pageprev.attr("class","enabled");
-  $pagecurrent.text("");
+  $pagecurrent.attr("class","hidden");
+  $pageoverflow.text("");
 
   renderTable();
   console.log("current page ", currentPage, " last page ", lastPage);
@@ -122,7 +135,8 @@ $page3.on("click",function(){
   $active.attr("class","inactive");
   $page3.attr("class","active");
   $pageprev.attr("class","enabled");
-  $pagecurrent.text("");
+  $pagecurrent.attr("class","hidden");
+  $pageoverflow.text("");
 
   renderTable();
   console.log("current page ", currentPage, " last page ", lastPage);
@@ -135,7 +149,8 @@ $page4.on("click",function(){
   $active.attr("class","inactive");
   $page4.attr("class","active");
   $pageprev.attr("class","enabled");
-  $pagecurrent.text("");
+  $pagecurrent.attr("class","hidden");
+  $pageoverflow.text("");
 
   renderTable();
   console.log("current page ", currentPage, " last page ", lastPage);
@@ -148,7 +163,8 @@ $page5.on("click",function(){
   $active.attr("class","inactive");
   $page5.attr("class","active");
   $pageprev.attr("class","enabled");
-  $pagecurrent.text("");
+  $pagecurrent.attr("class","hidden");
+  $pageoverflow.text("");
 
   renderTable();
   console.log("current page ", currentPage, " last page ", lastPage);
@@ -163,7 +179,8 @@ $pageprev.on("click",function(){
   currentPage = currentPage -1;
   $active = d3.select(".active");
   $active.attr("class","inactive");
-  $pagecurrent.text("");
+  $pageoverflow.text("");
+  $pagecurrent.attr("class","hidden");
 
   switch(currentPage) {
     case(1):
@@ -184,7 +201,7 @@ $pageprev.on("click",function(){
     break;
     default:
       $pagecurrent.attr("class","active");
-      $pagecurrent.text(currentPage);
+      $pageoverflow.text(currentPage);
   }
 
 
