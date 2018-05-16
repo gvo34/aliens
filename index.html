@@ -7,7 +7,7 @@
   <title>Alien Sightings</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.7.3/d3.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="CSS/styles.css">
 </head>
 
 <body>
@@ -35,9 +35,9 @@
                                 <span class="caret"></span></a> 
                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                                <li class="dropdown-item" id="dd/mm/yyyy"><a  href="#">date/time</a></li>
-                               <li class="dropdown-item" id="Enter City name"><a  href="#">city</a></li>
-                               <li class="dropdown-item" id="Enter State name"><a  href="#">state</a></li>
-                               <li class="dropdown-item" id="Enter Country name"><a href="#">country</a></li>
+                               <li class="dropdown-item" id="Enter City"><a  href="#">city</a></li>
+                               <li class="dropdown-item" id="Enter State"><a  href="#">state</a></li>
+                               <li class="dropdown-item" id="Enter Country"><a href="#">country</a></li>
                                <li class="dropdown-item" id="Enter Shape"><a href="#">shape</a></li>
                                </ul>
                            </li>
@@ -62,6 +62,52 @@
     </div>
 
 
+    <!--pagination-->
+    <div class="row">
+      <div class="col-md-10">
+        <nav aria-label="Search results pages">
+          <ul class="pagination">
+              <li>
+                  <span>
+                    <select id="selectFilterCount" onchange="setSearchResultCount(this.value)">
+                        <option value="10">10 per page</option>
+                        <option value="20">20 per page</option>
+                        <option value="50">50 per page</option>
+                    </select>
+                  </span>
+                </li>
+            <li class="disabled" aria-label="Previous" id="prev" aria-hidden="true">
+              <span>
+                <span aria-hidden="true">&laquo;</span>
+              </span>
+            </li>
+            <li class="active" id="page1">
+              <span>1 </span>
+            </li>
+            <li class="inactive" id="page2">
+              <span>2 </span>
+            </li>
+            <li class="inactive" id="page3">
+              <span>3 </span>
+            </li>
+            <li class="inactive" id="page4">
+              <span>4 </span>
+            </li>
+            <li class="inactive" id="page5">
+              <span>5 </span>
+            </li>
+            <li class="hidden" id="pagec">
+              <span id="pageoverflow">current</span>
+            </li>
+            <li>
+              <a href="#" aria-label="Next" id="next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>    
+          </ul>
+        </nav>
+      </div>
+
     <!--Table of selected criteria-->
     <div class="row">
       <div class="col-md-12">
@@ -83,7 +129,7 @@
       </div>
     </div>
   </div>
-  <script src="../data/data.js" type="text/javascript"></script>
+  <script src="data/data.js" type="text/javascript"></script>
   <script src="index.js" type="text/javascript"></script>
 
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
